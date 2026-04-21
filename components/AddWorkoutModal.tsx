@@ -1,6 +1,12 @@
 import React, { useState } from "react";
-import { Alert } from "react-native";
-import { Modal, Portal, Text } from "react-native-paper";
+import { Alert, TextInput, View } from "react-native";
+import {
+  Button,
+  Modal,
+  Portal,
+  SegmentedButtons,
+  Text,
+} from "react-native-paper";
 
 interface AddWorkoutModalProps {
   isVisible: boolean;
@@ -87,6 +93,58 @@ export const AddWorkoutModal: React.FC<AddWorkoutModalProps> = ({
         >
           Aggiungi Allenamento
         </Text>
+
+        <TextInput
+          placeholder="Es. Corsa, Flessioni..."
+          value={esercizio}
+          onChangeText={setEsercizio}
+          style={{ marginBottom: 15 }}
+        />
+
+        <TextInput
+          placeholder="30"
+          value={durata}
+          onChangeText={setDurata}
+          keyboardType="numeric"
+          style={{ marginBottom: 15 }}
+        />
+
+        <Text
+          variant="bodyMedium"
+          style={{ marginBottom: 10, fontWeight: "600" }}
+        >
+          Tipo Allenamento
+        </Text>
+        <SegmentedButtons
+          value={tipo}
+          onValueChange={setTipo}
+          buttons={[
+            { value: "Cardio", label: "Cardio" },
+            { value: "Strength", label: "Strength" },
+          ]}
+          style={{ marginBottom: 15 }}
+        />
+
+        {/* INPUT NOTE */}
+        <TextInput
+          placeholder="Note facoltative..."
+          value={note}
+          onChangeText={setNote}
+          multiline
+          numberOfLines={3}
+          style={{ marginBottom: 20 }}
+        />
+
+        {/* BOTTONI */}
+        <View style={{ flexDirection: "row", gap: 10 }}>
+          <Button mode="outlined" onPress={handleAnnulla} style={{ flex: 1 }}>
+            Annulla
+          </Button>
+
+          <Button mode="contained" onPress={handleSave} style={{ flex: 1 }}>
+            Salva
+          </Button>
+        </View>
       </Modal>
     </Portal>
   );
