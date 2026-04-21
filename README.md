@@ -1,50 +1,61 @@
-# Welcome to your Expo app 👋
+📋 ROADMAP FITNESS TRACKER - WORKOUT ONLY
+FASE 1: Setup Base + UI Home
+Obbiettivo: Struttura app + interfaccia pulita
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Setup Expo project
+Navigation setup (tab navigator: Home, Stats, Settings)
+Home screen mockup
+Esercizio 1: Crea la UI della home (bottone +, lista vuota)
 
-## Get started
+FASE 2: Form Aggiungere Workout
+Obbiettivo: Creare workout
 
-1. Install dependencies
+Form con: esercizio, durata (minuti), tipo (cardio/strength), note
+Validazione input
+Esercizio 2: Costruisci il form + valida i campi
 
-   ```bash
-   npm install
-   ```
+FASE 3: AsyncStorage + Persistenza
+Obbiettivo: Salvare i dati
 
-2. Start the app
+Salvataggio workout in AsyncStorage
+Caricamento al startup
+Esercizio 3: Implementa save/load, testa che i dati restano dopo chiusura app
 
-   ```bash
-   npx expo start
-   ```
+FASE 4: Visualizzazione Lista + Dettagli
+Obbiettivo: Mostrare workout + dettagli singolo
 
-In the output, you'll find options to open the app in a
+Lista workout nella home (con swipe delete?)
+Dettagli workout in modal/screen
+Esercizio 4: Crea lista con FlatList + drill-down su dettagli
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+FASE 5: Edit + Delete Workout
+Obbiettivo: Modificare/cancellare
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+Edit modal con form pre-compilato
+Delete con conferma
+Esercizio 5: Implementa edit e delete completi
 
-## Get a fresh project
+FASE 6: Statistiche Base
+ObIettivo: Sezione Stats
 
-When you're ready, run:
+Totale allenamenti
+Durata totale ore
+Media durata per allenamento
+Allenamenti per tipo (cardio vs strength)
+Esercizio 6: Crea la schermata stats con numeri
 
-```bash
-npm run reset-project
-```
+FASE 7: Chart Andamento
+Obbiettivo: Visualizzazione grafica
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+Chart allenamenti per settimana (BarChart da react-native-chart-kit)
+Ultimi 7/30 giorni
+Esercizio 7: Implementa chart + logica aggregazione dati
 
-## Learn more
+FASE 8: Polish + Animazioni
+Obbiettivo: Finish
 
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+Dark mode (se ti va)
+Animazioni transizioni
+Icons mignon
+README completo
+Esercizio 8: Applica style finale + crea README con screenshot
