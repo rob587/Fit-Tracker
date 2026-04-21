@@ -1,10 +1,22 @@
-import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import React, { useState } from "react";
+import { Button, StyleSheet, Text, View } from "react-native";
 
 const index = () => {
+  const [loading, setLoading] = useState(true);
+
+  if (loading) {
+    return (
+      <View>
+        <Text>Caricamento...</Text>
+      </View>
+    );
+  }
+
   return (
     <View>
-      <Text>index</Text>
+      <Text>I miei Allenamenti</Text>
+
+      <Button title="Aggiungi workout"></Button>
     </View>
   );
 };
