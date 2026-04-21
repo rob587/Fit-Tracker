@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-import { Alert, TextInput, View } from "react-native";
+import { Alert, View } from "react-native";
 import {
   Button,
   Modal,
   Portal,
   SegmentedButtons,
   Text,
+  TextInput,
 } from "react-native-paper";
 
 interface AddWorkoutModalProps {
@@ -95,16 +96,20 @@ export const AddWorkoutModal: React.FC<AddWorkoutModalProps> = ({
         </Text>
 
         <TextInput
+          label="Esercizio"
           placeholder="Es. Corsa, Flessioni..."
           value={esercizio}
+          mode="outlined"
           onChangeText={setEsercizio}
           style={{ marginBottom: 15 }}
         />
 
         <TextInput
+          label="Durata (minuti)"
           placeholder="30"
           value={durata}
           onChangeText={setDurata}
+          mode="outlined"
           keyboardType="numeric"
           style={{ marginBottom: 15 }}
         />
@@ -127,9 +132,11 @@ export const AddWorkoutModal: React.FC<AddWorkoutModalProps> = ({
 
         {/* INPUT NOTE */}
         <TextInput
+          label="Note (opzionale)"
           placeholder="Note facoltative..."
           value={note}
           onChangeText={setNote}
+          mode="outlined"
           multiline
           numberOfLines={3}
           style={{ marginBottom: 20 }}
