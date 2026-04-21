@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Alert } from "react-native";
+import { Modal, Portal, Text } from "react-native-paper";
 
 interface AddWorkoutModalProps {
   isVisible: boolean;
@@ -41,9 +42,52 @@ export const AddWorkoutModal: React.FC<AddWorkoutModalProps> = ({
     setNote("");
   };
 
+  //   funzione di salvataggio
+
+  const handleSave = () => {
+    if (!validaForm()) return;
+
+    const workout = {
+      id: Date.now(),
+      esercizio,
+      durata: parseInt(durata),
+      tipo,
+      note,
+      data: new Date().toLocaleDateString("it-IT"),
+    };
+
+    console.log("Workout salvato:", workout);
+    Alert.alert("Successo", `Allenamento "${esercizio}" aggiunto!`);
+
+    resetForm();
+    onClose();
+  };
+
   // funzione annulla
   const handleAnnulla = () => {
     resetForm();
     onClose();
   };
+
+  return (
+    <Portal>
+      <Modal
+        visible={isVisible}
+        onDismiss={handleAnnulla}
+        contentContainerStyle={{
+          backgroundColor: "white",
+          margin: 20,
+          padding: 20,
+          borderRadius: 12,
+        }}
+      >
+        <Text
+          variant="headlineSmall"
+          style={{ marginBottom: 20, fontWeight: "bold" }}
+        >
+          Aggiungi Allenamento
+        </Text>
+      </Modal>
+    </Portal>
+  );
 };
