@@ -30,4 +30,33 @@ export const useWorkoutStorage = () => {
       setLoading(false);
     }
   }, []);
+
+  //   salvataggio delle sessioni
+
+  const saveSessions = useCallback(async (data: Session[]) => {
+    try {
+      await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+      setSessions(data);
+      setError(null);
+    } catch (err) {
+      setError("Errore nel salvataggio sessioni");
+      console.error("Error saving sessions:", err);
+    }
+  }, []);
+
+  //   aggiunge una nuova sessione
+
+  const addSession = useCallback(
+    async (session: Session) => {
+      try {
+        const updatedSessions = [...sessions, session];
+        await saveSessions(updatedSessions);
+        return session;
+      } catch (err) {
+        setError("Errore nel aggiungere sessione");
+        console.error("Error adding session:", err);
+      }
+    },
+    [sessions, saveSessions],
+  );
 };
