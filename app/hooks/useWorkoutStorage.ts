@@ -1,6 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useCallback, useState } from "react";
-import { Session } from "../types";
+import { Session, WorkoutSet } from "../types";
 
 const STORAGE_KEY = "workouts_data";
 
@@ -99,6 +99,78 @@ export const useWorkoutStorage = () => {
         setError("Errore nel cancellare esercizio");
         console.error("Error deleting exercise:", err);
         return false;
+      }
+    },
+    [sessions, saveSessions],
+  );
+
+  //aggiunge serie a esercizio
+  const addSetToExercise = useCallback(
+    async (sessionId: string, exerciseId: string, set: WorkoutSet) => {
+      try {
+        const updatedSessions = sessions.map((session) => {
+          if (session.id === sessionId) {
+            return {
+              ...session,
+              exercises: session.exercises.map((exercise) => {
+                if (exercise.id === exerciseId) {
+                  return {
+                    ...exercise,
+                    sets: [...exercise.sets, set],
+                  };
+                }
+                return exercise;
+              }),
+              updatedAt: new Date().toISOString(),
+            };
+          }
+          return session;
+        });
+        await saveSessions(updatedSessions);
+        return set;
+      } catch (err) {
+        setError("Errore nel aggiungere serie");
+        console.error("Error adding set:", err);
+      }
+    },
+    [sessions, saveSessions],
+  );
+
+  //   aggiorna una serie
+
+  const updatedSet = useCallback(
+    async (
+      sessionId: string,
+      exerciseId: string,
+      setId: string,
+      updatedSet: WorkoutSet,
+    ) => {
+      try {
+        const updatedSessions = sessions.map((session) => {
+          if (session.id === sessionId) {
+            return {
+              ...session,
+              exercises: session.exercises.map((exercise) => {
+                if (exercise.id === exerciseId) {
+                  return {
+                    ...exercise,
+                    sets: exercise.sets.map((s) =>
+                      s.id === setId ? updatedSet : s,
+                    ),
+                  };
+                }
+                return exercise;
+              }),
+              updatedAt: new Date().toISOString(),
+            };
+          }
+          return session;
+        });
+        await saveSessions(updatedSessions);
+        return updatedSet;
+      } catch (err) {
+        setError("Errore nel aggiornare serie");
+        console.error("Error updating set:", err);
       }
     },
     [sessions, saveSessions],

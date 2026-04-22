@@ -1,4 +1,4 @@
-export interface Set {
+export interface WorkoutSet {
   id: string;
   setNumber: number;
   reps: number;
@@ -9,7 +9,7 @@ export interface Set {
 export interface Exercise {
   id: string;
   name: string;
-  sets: Set[];
+  sets: WorkoutSet[];
   createdAt: string;
 }
 
