@@ -175,4 +175,36 @@ export const useWorkoutStorage = () => {
     },
     [sessions, saveSessions],
   );
+
+  //   cancella una serie
+
+  const deleteSet = useCallback(
+    async (sessionId: string, exerciseId: string, setId: string) => {
+      try {
+        const updatedSessions = sessions.map((session) => {
+          if (session.id === sessionId) {
+            return {
+              ...session,
+              exercises: session.exercises.map((exercise) => {
+                if (exercise.id === exerciseId) {
+                  return {
+                    ...exercise,
+                    sets: exercise.sets.filter((s) => s.id !== setId),
+                  };
+                }
+                return exercise;
+              }),
+              updatedAt: new Date().toISOString(),
+            };
+          }
+          return session;
+        });
+      } catch (err) {
+        setError("Errore nel cancellare serie");
+        console.error("Error deleting set:", err);
+        return false;
+      }
+    },
+    [sessions, saveSessions],
+  );
 };
