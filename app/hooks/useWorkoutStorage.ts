@@ -1,6 +1,7 @@
+// hooks/useWorkoutStorage.ts
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useCallback, useState } from "react";
-import { Session, WorkoutSet } from "../types";
+import { useCallback, useEffect, useState } from "react";
+import { Exercise, Session, WorkoutSet } from "../types";
 
 const STORAGE_KEY = "workouts_data";
 
@@ -9,8 +10,10 @@ export const useWorkoutStorage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // carica le sessioni dall'asyncstorage
-
+  /**
+   * CARICA tutte le sessioni da AsyncStorage
+   * Si chiama automaticamente all'avvio
+   */
   const loadSessions = useCallback(async () => {
     try {
       setLoading(true);
@@ -31,8 +34,9 @@ export const useWorkoutStorage = () => {
     }
   }, []);
 
-  //   salvataggio delle sessioni
-
+  /**
+   * SALVA tutte le sessioni in AsyncStorage
+   */
   const saveSessions = useCallback(async (data: Session[]) => {
     try {
       await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(data));
@@ -44,8 +48,9 @@ export const useWorkoutStorage = () => {
     }
   }, []);
 
-  //   aggiunge una nuova sessione
-
+  /**
+   * AGGIUNGE una nuova sessione
+   */
   const addSession = useCallback(
     async (session: Session) => {
       try {
@@ -60,8 +65,9 @@ export const useWorkoutStorage = () => {
     [sessions, saveSessions],
   );
 
-  //   aggiorna una sessione esistente
-
+  /**
+   * AGGIORNA una sessione esistente
+   */
   const updateSession = useCallback(
     async (sessionId: string, updatedSession: Session) => {
       try {
@@ -78,8 +84,85 @@ export const useWorkoutStorage = () => {
     [sessions, saveSessions],
   );
 
-  //   cancella una sessione
+  /**
+   * CANCELLA una sessione
+   */
+  const deleteSession = useCallback(
+    async (sessionId: string) => {
+      try {
+        const updatedSessions = sessions.filter((s) => s.id !== sessionId);
+        await saveSessions(updatedSessions);
+        return true;
+      } catch (err) {
+        setError("Errore nel cancellare sessione");
+        console.error("Error deleting session:", err);
+        return false;
+      }
+    },
+    [sessions, saveSessions],
+  );
 
+  /**
+   * AGGIUNGE un esercizio a una sessione
+   */
+  const addExerciseToSession = useCallback(
+    async (sessionId: string, exercise: Exercise) => {
+      try {
+        const updatedSessions = sessions.map((session) => {
+          if (session.id === sessionId) {
+            return {
+              ...session,
+              exercises: [...session.exercises, exercise],
+              updatedAt: new Date().toISOString(),
+            };
+          }
+          return session;
+        });
+        await saveSessions(updatedSessions);
+        return exercise;
+      } catch (err) {
+        setError("Errore nel aggiungere esercizio");
+        console.error("Error adding exercise:", err);
+      }
+    },
+    [sessions, saveSessions],
+  );
+
+  /**
+   * AGGIORNA un esercizio in una sessione
+   */
+  const updateExercise = useCallback(
+    async (
+      sessionId: string,
+      exerciseId: string,
+      updatedExercise: Exercise,
+    ) => {
+      try {
+        const updatedSessions = sessions.map((session) => {
+          if (session.id === sessionId) {
+            return {
+              ...session,
+              exercises: session.exercises.map((ex) =>
+                ex.id === exerciseId ? updatedExercise : ex,
+              ),
+              updatedAt: new Date().toISOString(),
+            };
+          }
+          return session;
+        });
+        await saveSessions(updatedSessions);
+        return updatedExercise;
+      } catch (err) {
+        setError("Errore nel aggiornare esercizio");
+        console.error("Error updating exercise:", err);
+      }
+    },
+    [sessions, saveSessions],
+  );
+
+  /**
+   * CANCELLA un esercizio da una sessione
+   */
   const deleteExercise = useCallback(
     async (sessionId: string, exerciseId: string) => {
       try {
@@ -104,7 +187,9 @@ export const useWorkoutStorage = () => {
     [sessions, saveSessions],
   );
 
-  //aggiunge serie a esercizio
+  /**
+   * AGGIUNGE una serie a un esercizio
+   */
   const addSetToExercise = useCallback(
     async (sessionId: string, exerciseId: string, set: WorkoutSet) => {
       try {
@@ -136,9 +221,10 @@ export const useWorkoutStorage = () => {
     [sessions, saveSessions],
   );
 
-  //   aggiorna una serie
-
-  const updatedSet = useCallback(
+  /**
+   * AGGIORNA una serie
+   */
+  const updateSet = useCallback(
     async (
       sessionId: string,
       exerciseId: string,
@@ -176,8 +262,9 @@ export const useWorkoutStorage = () => {
     [sessions, saveSessions],
   );
 
-  //   cancella una serie
-
+  /**
+   * CANCELLA una serie
+   */
   const deleteSet = useCallback(
     async (sessionId: string, exerciseId: string, setId: string) => {
       try {
@@ -199,6 +286,8 @@ export const useWorkoutStorage = () => {
           }
           return session;
         });
+        await saveSessions(updatedSessions);
+        return true;
       } catch (err) {
         setError("Errore nel cancellare serie");
         console.error("Error deleting set:", err);
@@ -207,4 +296,34 @@ export const useWorkoutStorage = () => {
     },
     [sessions, saveSessions],
   );
+
+  /**
+   * Carica le sessioni al primo render
+   */
+  useEffect(() => {
+    loadSessions();
+  }, [loadSessions]);
+
+  return {
+    // State
+    sessions,
+    loading,
+    error,
+
+    // Operazioni Sessioni
+    addSession,
+    updateSession,
+    deleteSession,
+    loadSessions,
+
+    // Operazioni Esercizi
+    addExerciseToSession,
+    updateExercise,
+    deleteExercise,
+
+    // Operazioni Serie
+    addSetToExercise,
+    updateSet,
+    deleteSet,
+  };
 };
