@@ -59,4 +59,48 @@ export const useWorkoutStorage = () => {
     },
     [sessions, saveSessions],
   );
+
+  //   aggiorna una sessione esistente
+
+  const updateSession = useCallback(
+    async (sessionId: string, updatedSession: Session) => {
+      try {
+        const updatedSessions = sessions.map((s) =>
+          s.id === sessionId ? updatedSession : s,
+        );
+        await saveSessions(updatedSessions);
+        return updatedSession;
+      } catch (err) {
+        setError("Errore nel aggiornare sessione");
+        console.error("Error updating session:", err);
+      }
+    },
+    [sessions, saveSessions],
+  );
+
+  //   cancella una sessione
+
+  const deleteExercise = useCallback(
+    async (sessionId: string, exerciseId: string) => {
+      try {
+        const updatedSessions = sessions.map((session) => {
+          if (session.id === sessionId) {
+            return {
+              ...session,
+              exercises: session.exercises.filter((ex) => ex.id !== exerciseId),
+              updatedAt: new Date().toISOString(),
+            };
+          }
+          return session;
+        });
+        await saveSessions(updatedSessions);
+        return true;
+      } catch (err) {
+        setError("Errore nel cancellare esercizio");
+        console.error("Error deleting exercise:", err);
+        return false;
+      }
+    },
+    [sessions, saveSessions],
+  );
 };
