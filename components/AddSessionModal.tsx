@@ -65,4 +65,11 @@ export const AddSessionModal: React.FC<AddSessionModalProps> = ({
       console.error("Error saving session:", error);
     }
   };
+
+  const handleAnnulla = () => {
+    resetForm();
+    onClose();
+  };
+
+  return <></>;
 };
