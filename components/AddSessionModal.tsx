@@ -1,6 +1,7 @@
 import { Session } from "@/app/types";
 import { useState } from "react";
-import { Alert } from "react-native";
+import { Alert, View } from "react-native";
+import { Button, Modal, Text, TextInput } from "react-native-paper";
 
 interface AddSessionModalProps {
   isVisible: boolean;
@@ -71,5 +72,48 @@ export const AddSessionModal: React.FC<AddSessionModalProps> = ({
     onClose();
   };
 
-  return <></>;
+  return (
+    <>
+      <Modal visible={isVisible} onDismiss={handleAnnulla}>
+        <View
+          style={{
+            backgroundColor: "white",
+            margin: 20,
+            padding: 20,
+            borderRadius: 12,
+          }}
+        >
+          <Text
+            variant="headlineSmall"
+            style={{ marginBottom: 20, fontWeight: "bold" }}
+          >
+            Aggiungi Sessione
+          </Text>
+
+          <TextInput
+            label="Nome Sessione"
+            placeholder="Es. Upper Body Monday"
+            value={nomeSessione}
+            onChangeText={setNomeSessione}
+            mode="outlined"
+            style={{ marginBottom: 15 }}
+          />
+
+          <View style={{ marginBottom: 15 }}>
+            <Text style={{ marginBottom: 8, fontWeight: "600" }}>
+              Data Sessione
+            </Text>
+
+            <Button
+              mode="outlined"
+              onPress={() => setShowDatePicker(true)}
+              style={{ marginBottom: 10 }}
+            >
+              📅 {formatDate(selectedDate)}
+            </Button>
+          </View>
+        </View>
+      </Modal>
+    </>
+  );
 };
