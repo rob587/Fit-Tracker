@@ -1,6 +1,7 @@
 import { Session } from "@/app/types";
 import { useState } from "react";
 import { Alert, View } from "react-native";
+import DatePicker from "react-native-date-picker";
 import { Button, Modal, Text, TextInput } from "react-native-paper";
 
 interface AddSessionModalProps {
@@ -110,6 +111,34 @@ export const AddSessionModal: React.FC<AddSessionModalProps> = ({
               style={{ marginBottom: 10 }}
             >
               📅 {formatDate(selectedDate)}
+            </Button>
+          </View>
+
+          {showDatePicker && (
+            <View style={{ marginBottom: 20 }}>
+              <DatePicker
+                date={selectedDate}
+                onDateChange={setSelectedDate}
+                mode="date"
+                locale="it"
+              />
+              <Button
+                mode="contained"
+                onPress={() => setShowDatePicker(false)}
+                style={{ marginTop: 10 }}
+              >
+                Conferma Data
+              </Button>
+            </View>
+          )}
+
+          <View style={{ flexDirection: "row", gap: 10 }}>
+            <Button mode="outlined" onPress={handleAnnulla} style={{ flex: 1 }}>
+              Annulla
+            </Button>
+
+            <Button mode="contained" onPress={handleSalva} style={{ flex: 1 }}>
+              Salva
             </Button>
           </View>
         </View>
