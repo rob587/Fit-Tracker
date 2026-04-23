@@ -1,11 +1,12 @@
+import { AddSessionModal } from "@/components/AddSessionModal";
 import React, { useState } from "react";
 import { ScrollView, View } from "react-native";
 import { ActivityIndicator, Card, FAB, Text } from "react-native-paper";
 import { useWorkoutStorage } from "../hooks/useWorkoutStorage";
 
 const index = () => {
-  const { sessions, loading } = useWorkoutStorage();
-  const [fabOpen, setFabOpen] = useState(false);
+  const { sessions, loading, addSession } = useWorkoutStorage();
+  const [modalVisible, setModalVisible] = useState(false);
 
   if (loading) {
     return (
@@ -24,12 +25,15 @@ const index = () => {
         style={{ flex: 1, backgroundColor: "#f5f5f5" }}
         contentContainerStyle={{ padding: 16, paddingBottom: 80 }}
       >
+        {/* HEADER */}
         <Text
           variant="headlineLarge"
-          style={{ marginBottom: 20, fontWeight: "bold", textAlign: "center" }}
+          style={{ marginBottom: 20, fontWeight: "bold" }}
         >
           I miei Allenamenti
         </Text>
+
+        {/* LISTA SESSIONI O MESSAGGIO VUOTO */}
         {!hasSession ? (
           <Card
             style={{ alignItems: "center", paddingVertical: 60, marginTop: 20 }}
@@ -79,9 +83,14 @@ const index = () => {
       <FAB
         icon="plus"
         style={{ position: "absolute", margin: 16, right: 0, bottom: 0 }}
-        onPress={() => {
-          // TODO: Apre il modal per aggiungere sessione
-          console.log("Apri modal aggiungi sessione");
+        onPress={() => setModalVisible(true)}
+      />
+
+      <AddSessionModal
+        isVisible={modalVisible}
+        onClose={() => setModalVisible(false)}
+        onAddSession={async (session) => {
+          await addSession(session);
         }}
       />
     </>
