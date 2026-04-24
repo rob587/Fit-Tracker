@@ -1,7 +1,8 @@
+// components/AddSessionModal.tsx
 import { Session } from "@/app/types";
-import { useState } from "react";
-import { Alert, View } from "react-native";
-import DatePicker from "react-native-date-picker";
+import DateTimePicker from "@react-native-community/datetimepicker";
+import React, { useState } from "react";
+import { Alert, Platform, View } from "react-native";
 import { Button, Modal, Text, TextInput } from "react-native-paper";
 
 interface AddSessionModalProps {
@@ -73,6 +74,16 @@ export const AddSessionModal: React.FC<AddSessionModalProps> = ({
     onClose();
   };
 
+  const handleDateChange = (event: any, date?: Date) => {
+    if (Platform.OS === "android") {
+      setShowDatePicker(false);
+    }
+
+    if (date) {
+      setSelectedDate(date);
+    }
+  };
+
   return (
     <>
       <Modal visible={isVisible} onDismiss={handleAnnulla}>
@@ -84,6 +95,7 @@ export const AddSessionModal: React.FC<AddSessionModalProps> = ({
             borderRadius: 12,
           }}
         >
+          {/* TITOLO */}
           <Text
             variant="headlineSmall"
             style={{ marginBottom: 20, fontWeight: "bold" }}
@@ -91,6 +103,7 @@ export const AddSessionModal: React.FC<AddSessionModalProps> = ({
             Aggiungi Sessione
           </Text>
 
+          {/* INPUT NOME SESSIONE */}
           <TextInput
             label="Nome Sessione"
             placeholder="Es. Upper Body Monday"
@@ -100,11 +113,11 @@ export const AddSessionModal: React.FC<AddSessionModalProps> = ({
             style={{ marginBottom: 15 }}
           />
 
+          {/* DATE PICKER BUTTON */}
           <View style={{ marginBottom: 15 }}>
             <Text style={{ marginBottom: 8, fontWeight: "600" }}>
               Data Sessione
             </Text>
-
             <Button
               mode="outlined"
               onPress={() => setShowDatePicker(true)}
@@ -114,24 +127,18 @@ export const AddSessionModal: React.FC<AddSessionModalProps> = ({
             </Button>
           </View>
 
+          {/* DATE PICKER */}
           {showDatePicker && (
-            <View style={{ marginBottom: 20 }}>
-              <DatePicker
-                date={selectedDate}
-                onDateChange={setSelectedDate}
-                mode="date"
-                locale="it"
-              />
-              <Button
-                mode="contained"
-                onPress={() => setShowDatePicker(false)}
-                style={{ marginTop: 10 }}
-              >
-                Conferma Data
-              </Button>
-            </View>
+            <DateTimePicker
+              value={selectedDate}
+              mode="date"
+              display="spinner"
+              onChange={handleDateChange}
+              textColor="#000"
+            />
           )}
 
+          {/* BOTTONI */}
           <View style={{ flexDirection: "row", gap: 10 }}>
             <Button mode="outlined" onPress={handleAnnulla} style={{ flex: 1 }}>
               Annulla
