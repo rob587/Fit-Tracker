@@ -1,10 +1,12 @@
 import { AddSessionModal } from "@/components/AddSessionModal";
+import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import { ScrollView, View } from "react-native";
 import { ActivityIndicator, Card, FAB, Text } from "react-native-paper";
 import { useWorkoutStorage } from "../hooks/useWorkoutStorage";
 
 const index = () => {
+  const router = useRouter();
   const { sessions, loading, addSession } = useWorkoutStorage();
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -58,6 +60,12 @@ const index = () => {
                   paddingVertical: 15,
                   paddingHorizontal: 12,
                 }}
+                onPress={() =>
+                  router.push({
+                    pathname: "/(tabs)/[sessionId]",
+                    params: { sessionId: session.id },
+                  })
+                }
               >
                 <Text variant="titleMedium" style={{ fontWeight: "bold" }}>
                   {session.name}

@@ -1,7 +1,7 @@
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
-import { ActivityIndicator, Appbar, Card, Text } from "react-native-paper";
+import { ActivityIndicator, Appbar, Card, FAB, Text } from "react-native-paper";
 import { useWorkoutStorage } from "../hooks/useWorkoutStorage";
 
 const sessionId = () => {
@@ -87,6 +87,15 @@ const sessionId = () => {
           </View>
         )}
       </ScrollView>
+
+      <FAB
+        icon="plus"
+        style={{ position: "absolute", margin: 16, right: 0, bottom: 0 }}
+        onPress={() => {
+          // TODO: Apre il modal per aggiungere esercizio
+          console.log("Apri modal aggiungi esercizio");
+        }}
+      />
     </>
   );
 };
