@@ -1,7 +1,7 @@
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React from "react";
-import { StyleSheet, View } from "react-native";
-import { ActivityIndicator, Text } from "react-native-paper";
+import { ScrollView, StyleSheet, View } from "react-native";
+import { ActivityIndicator, Appbar, Card, Text } from "react-native-paper";
 import { useWorkoutStorage } from "../hooks/useWorkoutStorage";
 
 const sessionId = () => {
@@ -34,9 +34,60 @@ const sessionId = () => {
   const hasExercises = session.exercises && session.exercises.length > 0;
 
   return (
-    <View>
-      <Text>[sessionId]</Text>
-    </View>
+    <>
+      <Appbar.Header>
+        <Appbar.BackAction onPress={() => router.back()} />
+        <Appbar.Content title={session.name} subtitle={session.date} />
+      </Appbar.Header>
+
+      <ScrollView
+        style={{ flex: 1, backgroundColor: "#f5f5f5" }}
+        contentContainerStyle={{ padding: 16, paddingBottom: 80 }}
+      >
+        <Text variant="bodySmall" style={{ color: "#666", marginBottom: 16 }}>
+          🏋️ {session.exercises.length} esercizi
+        </Text>
+
+        {!hasExercises ? (
+          <Card
+            style={{ alignItems: "center", paddingVertical: 60, marginTop: 20 }}
+          >
+            <Text
+              variant="titleMedium"
+              style={{ color: "#999", marginBottom: 10 }}
+            >
+              Nessun esercizio
+            </Text>
+            <Text variant="bodySmall" style={{ color: "#bbb" }}>
+              Tocca il + per aggiungere il primo esercizio!
+            </Text>
+          </Card>
+        ) : (
+          <View>
+            {session.exercises.map((exercise) => (
+              <Card
+                key={exercise.id}
+                style={{
+                  marginBottom: 12,
+                  paddingVertical: 12,
+                  paddingHorizontal: 12,
+                }}
+              >
+                <Text variant="titleSmall" style={{ fontWeight: "bold" }}>
+                  {exercise.name}
+                </Text>
+                <Text
+                  variant="bodySmall"
+                  style={{ color: "#666", marginTop: 4 }}
+                >
+                  📊 {exercise.sets.length} serie
+                </Text>
+              </Card>
+            ))}
+          </View>
+        )}
+      </ScrollView>
+    </>
   );
 };
 
