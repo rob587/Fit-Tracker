@@ -22,4 +22,33 @@ export const AddExerciseModal: React.FC<AddExerciseModalProps> = ({
     }
     return true;
   };
+
+  const resetForm = () => {
+    setNomeEsercizio("");
+  };
+
+  const handleSave = async () => {
+    if (!validaForm) return;
+
+    try {
+      const nuovoEsercizio: Exercise = {
+        id: Date.now().toString(),
+        name: nomeEsercizio,
+        sets: [],
+        createdAt: new Date().toISOString(),
+      };
+      await onAddExercise(nuovoEsercizio);
+      Alert.alert("Successo", `Esercizio "${nomeEsercizio}" aggiunto!`);
+      resetForm();
+      onClose();
+    } catch (error) {
+      Alert.alert("Errore", "Errore nel salvare l'esercizio");
+      console.error("Error saving exercise:", error);
+    }
+  };
+
+  const handleAnnulla = () => {
+    resetForm();
+    onClose();
+  };
 };
