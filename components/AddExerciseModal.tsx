@@ -1,6 +1,7 @@
 import { Exercise } from "@/app/types";
 import React, { useState } from "react";
-import { Alert } from "react-native";
+import { Alert, View } from "react-native";
+import { Button, Modal, Text, TextInput } from "react-native-paper";
 
 interface AddExerciseModalProps {
   isVisible: boolean;
@@ -51,4 +52,43 @@ export const AddExerciseModal: React.FC<AddExerciseModalProps> = ({
     resetForm();
     onClose();
   };
+
+  return (
+    <Modal visible={isVisible} onDismiss={handleAnnulla}>
+      <View
+        style={{
+          backgroundColor: "white",
+          margin: 20,
+          padding: 20,
+          borderRadius: 12,
+        }}
+      >
+        <Text
+          variant="headlineSmall"
+          style={{ marginBottom: 20, fontWeight: "bold" }}
+        >
+          Aggiungi Esercizio
+        </Text>
+
+        <TextInput
+          label="Nome Esercizio"
+          placeholder="Es. Panca Piana, Trazioni, Squat..."
+          value={nomeEsercizio}
+          onChangeText={setNomeEsercizio}
+          mode="outlined"
+          style={{ marginBottom: 20 }}
+        />
+
+        <View style={{ flexDirection: "row", gap: 10 }}>
+          <Button mode="outlined" onPress={handleAnnulla} style={{ flex: 1 }}>
+            Annulla
+          </Button>
+
+          <Button mode="contained" onPress={handleSave} style={{ flex: 1 }}>
+            Salva
+          </Button>
+        </View>
+      </View>
+    </Modal>
+  );
 };
