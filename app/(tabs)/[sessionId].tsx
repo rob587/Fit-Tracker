@@ -1,5 +1,6 @@
+import { AddExerciseModal } from "@/components/AddExerciseModal";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import React from "react";
+import React, { useState } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 import { ActivityIndicator, Appbar, Card, FAB, Text } from "react-native-paper";
 import { useWorkoutStorage } from "../hooks/useWorkoutStorage";
@@ -7,7 +8,8 @@ import { useWorkoutStorage } from "../hooks/useWorkoutStorage";
 const sessionId = () => {
   const router = useRouter();
   const { sessionId } = useLocalSearchParams<{ sessionId: string }>();
-  const { sessions, loading } = useWorkoutStorage();
+  const { sessions, loading, addExerciseToSession } = useWorkoutStorage();
+  const [modalVisible, setModalVisible] = useState(false);
 
   // metodo find per trovare la sessione con id
 
@@ -32,6 +34,12 @@ const sessionId = () => {
   }
 
   const hasExercises = session.exercises && session.exercises.length > 0;
+
+  const handleAddExercise = async (exercise: any) => {
+    if (sessionId) {
+      await addExerciseToSession(sessionId, exercise);
+    }
+  };
 
   return (
     <>
@@ -91,10 +99,13 @@ const sessionId = () => {
       <FAB
         icon="plus"
         style={{ position: "absolute", margin: 16, right: 0, bottom: 0 }}
-        onPress={() => {
-          // TODO: Apre il modal per aggiungere esercizio
-          console.log("Apri modal aggiungi esercizio");
-        }}
+        onPress={() => setModalVisible(true)}
+      />
+
+      <AddExerciseModal
+        isVisible={modalVisible}
+        onClose={() => setModalVisible(false)}
+        onAddExercise={handleAddExercise}
       />
     </>
   );
