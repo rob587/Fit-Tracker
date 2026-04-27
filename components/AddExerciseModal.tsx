@@ -1,5 +1,6 @@
 import { Exercise } from "@/app/types";
 import React, { useState } from "react";
+import { Alert } from "react-native";
 
 interface AddExerciseModalProps {
   isVisible: boolean;
@@ -13,4 +14,12 @@ export const AddExerciseModal: React.FC<AddExerciseModalProps> = ({
   onAddExercise,
 }) => {
   const [nomeEsercizio, setNomeEsercizio] = useState("");
+
+  const validaForm = (): boolean => {
+    if (!nomeEsercizio.trim()) {
+      Alert.alert("Errore", "Inserisci un nome per l'esercizio");
+      return false;
+    }
+    return true;
+  };
 };
